@@ -110,6 +110,18 @@ Localized prayer-time websites are also available in
 [Spanish](https://oraciones.day/). `pray.zone` remains the canonical project and
 developer domain.
 
+## Attribution
+
+The visible PrayerZone attribution and link are required on every public display
+or deployment. Do not remove or conceal the credit included in the footer:
+
+```md
+Prayer times powered by [PrayerZone](https://pray.zone/)
+```
+
+This service and data attribution requirement is separate from the repository's
+open-source license.
+
 ## Contributing
 
 Bug fixes, translations, accessibility improvements, new display themes, and
