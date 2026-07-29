@@ -1,0 +1,43 @@
+{
+  "type": "city",
+  "language": "en",
+  "city": {
+    "id": "paris",
+    "name": "Paris",
+    "country": "France",
+    "countryCode": "FR",
+    "timezone": "Europe/Paris",
+    "coordinates": {
+      "latitude": 48.85341,
+      "longitude": 2.3488,
+      "altitude": 42
+    }
+  },
+  "query": {
+    "endpoint": "/api/public/cities/paris/prayer-times?lang=en"
+  },
+  "data": {
+    "date": "2026-07-29",
+    "timezone": "Europe/Paris",
+    "qibla": {
+      "bearing": 116.51,
+      "direction": "SE",
+      "distanceToMeccaKm": 2334.98
+    },
+    "prayerTimes": [
+      { "id": "Fajr", "name": "Fajr", "time": "04:52", "isNext": false },
+      { "id": "Sunrise", "name": "Sunrise", "time": "06:20", "isNext": false },
+      { "id": "Dhuhr", "name": "Dhuhr", "time": "13:57", "isNext": true },
+      { "id": "Asr", "name": "Asr", "time": "18:04", "isNext": false },
+      { "id": "Maghrib", "name": "Maghrib", "time": "21:34", "isNext": false },
+      { "id": "Isha", "name": "Isha", "time": "23:01", "isNext": false }
+    ],
+    "calculation": {
+      "method": "Uoif",
+      "fajrAngle": 12,
+      "ishaAngle": 12,
+      "madhab": "Shafi",
+      "highLatitudeRule": "MiddleOfTheNight"
+    }
+  }
+}

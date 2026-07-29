@@ -1,0 +1,19 @@
+{
+  "name": "PrayerZone Mosque Display",
+  "short_name": "Mosque Display",
+  "description": "Prayer times, countdowns and announcements for mosque screens.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#061310",
+  "theme_color": "#071a18",
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <radialGradient id="glow" cx="70%" cy="10%" r="80%">
+      <stop offset="0" stop-color="#1f6c54"/>
+      <stop offset="1" stop-color="#061310"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="640" fill="url(#glow)"/>
+  <circle cx="1035" cy="178" r="122" fill="#8fe3be"/>
+  <circle cx="1082" cy="136" r="118" fill="#0a221c"/>
+  <text x="86" y="108" fill="#8fe3be" font-family="Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="5">PRAYERZONE</text>
+  <text x="84" y="244" fill="#f7faf9" font-family="Arial, sans-serif" font-size="78" font-weight="700">Mosque Display</text>
+  <text x="88" y="304" fill="#9eb8b0" font-family="Arial, sans-serif" font-size="31">A modern prayer-times screen for mosques</text>
+  <rect x="86" y="377" width="1108" height="148" rx="26" fill="#12362e" stroke="#34775f"/>
+  <text x="123" y="425" fill="#8fe3be" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="3">NEXT PRAYER</text>
+  <text x="123" y="491" fill="#ffffff" font-family="Arial, sans-serif" font-size="52" font-weight="700">Dhuhr · 13:57</text>
+  <text x="877" y="484" fill="#ffffff" font-family="Arial, sans-serif" font-size="62" font-weight="700">01:24:18</text>
+  <text x="88" y="588" fill="#9eb8b0" font-family="Arial, sans-serif" font-size="24">Powered by pray.zone</text>
+</svg>
