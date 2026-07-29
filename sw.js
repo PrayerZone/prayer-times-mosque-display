@@ -1,8 +1,8 @@
-const CACHE_NAME = "prayerzone-mosque-display-v3";
+const CACHE_NAME = "prayerzone-mosque-display-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=1.1.1",
+  "./styles.css?v=1.1.2",
   "./src/app.js?v=1.1.1",
   "./src/core.js?v=1.1.1",
   "./src/i18n.js?v=1.1.1",

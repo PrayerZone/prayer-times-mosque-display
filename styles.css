@@ -397,6 +397,110 @@ dialog::backdrop { background: rgba(0, 0, 0, .72); backdrop-filter: blur(8px); }
 
 @keyframes pulse { to { opacity: .25; } }
 
+@media (min-width: 1600px) {
+  .prayer-card { min-height: 12rem; padding: 1.7rem; }
+}
+
+@media (min-width: 721px) and (max-height: 1200px) {
+  .display-shell {
+    min-height: 100dvh;
+    padding: 1.25rem clamp(1.5rem, 2.4vw, 3rem);
+    gap: .9rem;
+  }
+
+  .hero { padding-top: 1rem; }
+  h1 { font-size: clamp(2.3rem, 5vw, 5rem); }
+  .clock { font-size: clamp(3rem, 7vw, 6.5rem); }
+  .date { margin-top: .65rem; }
+
+  .next-prayer { padding: 1.2rem 1.5rem; }
+  .next-prayer h2 { font-size: clamp(2rem, 3.5vw, 3.4rem); }
+  .countdown span { font-size: clamp(2.4rem, 5vw, 5rem); }
+
+  .prayer-section { align-self: stretch; }
+  .prayer-grid { margin-top: .75rem; }
+  .prayer-card {
+    min-height: 8rem;
+    padding: 1rem;
+  }
+  .jumuah-card {
+    margin-top: .75rem;
+    padding: .85rem 1rem;
+  }
+  footer { padding-top: 0; }
+}
+
+@media (min-width: 721px) and (max-height: 850px) {
+  .display-shell {
+    min-height: 100dvh;
+    padding: .75rem clamp(1rem, 2.2vw, 2.5rem);
+    gap: .55rem;
+  }
+
+  .brand-mark { width: 2rem; height: 2rem; }
+  .connection-status { padding: .4rem .7rem; }
+  .icon-button { width: 2.25rem; height: 2.25rem; }
+
+  .hero {
+    padding-top: .25rem;
+  }
+  .eyebrow { margin-bottom: .25rem; }
+  h1 {
+    margin-bottom: .25rem;
+    font-size: clamp(2rem, 4vw, 4rem);
+  }
+  .location-meta { font-size: clamp(.8rem, 1vw, 1rem); }
+  .clock { font-size: clamp(3rem, 6vw, 5.5rem); }
+  .date { margin-top: .45rem; font-size: .88rem; }
+
+  .next-prayer {
+    padding: .8rem 1.2rem;
+    border-radius: 1.2rem;
+  }
+  .next-prayer h2 { font-size: clamp(1.65rem, 3vw, 2.8rem); }
+  .next-prayer-copy > p:last-child { font-size: .95rem; }
+  .countdown span { font-size: clamp(2.2rem, 4.5vw, 4rem); }
+  .countdown small { font-size: .7rem; }
+
+  .prayer-section { align-self: stretch; }
+  .section-heading h2 { font-size: 1.15rem; }
+  .section-heading p { font-size: .78rem; }
+  .prayer-grid {
+    gap: .5rem;
+    margin-top: .5rem;
+  }
+  .prayer-card {
+    min-height: 5.7rem;
+    padding: .65rem .8rem;
+    border-radius: .9rem;
+  }
+  .prayer-card p { font-size: .82rem; }
+  .prayer-card time { font-size: clamp(1.55rem, 2.4vw, 2.3rem); }
+  .prayer-card .iqama-time {
+    margin-top: .2rem;
+    font-size: .68rem;
+  }
+  .prayer-card.is-next { transform: none; }
+
+  .jumuah-card {
+    margin-top: .5rem;
+    padding: .55rem .8rem;
+    border-radius: .9rem;
+  }
+  .jumuah-card h3 { font-size: 1.15rem; }
+  .jumuah-times { gap: .4rem; }
+  .jumuah-times time {
+    padding: .3rem .55rem;
+    border-radius: .55rem;
+    font-size: 1.05rem;
+  }
+
+  footer {
+    padding-top: 0;
+    font-size: .7rem;
+  }
+}
+
 @media (max-width: 720px) {
   .hero { align-items: start; flex-direction: column; }
   .clock-panel { text-align: left; }
@@ -414,10 +518,6 @@ dialog::backdrop { background: rgba(0, 0, 0, .72); backdrop-filter: blur(8px); }
 [dir="rtl"] .countdown { text-align: left; }
 [dir="rtl"] .brand,
 [dir="rtl"] .prayer-card { text-align: right; }
-
-@media (min-width: 1600px) {
-  .prayer-card { min-height: 12rem; padding: 1.7rem; }
-}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
