@@ -8,8 +8,8 @@ import {
   normalizeSettings,
   secondsUntilPrayer,
   settingsFromSearch,
-} from "./core.js";
-import { prayerName, translator } from "./i18n.js";
+} from "./core.js?v=1.1.1";
+import { prayerName, translator } from "./i18n.js?v=1.1.1";
 
 const STORAGE_KEY = "prayerzone-mosque-display-settings-v1";
 const CACHE_KEY = "prayerzone-mosque-display-data-v1";
