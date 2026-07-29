@@ -25,11 +25,9 @@ projectors, Raspberry Pi kiosks, and information screens. It uses the public
 
 ## Try it
 
-The hosted application will be available at:
+Open the hosted application:
 
-```text
-https://prayerzone.github.io/prayer-times-mosque-display/
-```
+[PrayerZone Mosque Display](https://prayerzone.github.io/prayer-times-mosque-display/)
 
 For local development:
 
