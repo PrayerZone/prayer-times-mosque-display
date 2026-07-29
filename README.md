@@ -16,6 +16,8 @@ projectors, Raspberry Pi kiosks, and information screens. It uses the public
 - city and mosque-specific schedules;
 - English, French, Arabic, German, Spanish, Bengali, Italian, and Portuguese API content;
 - configurable mosque name, announcements, themes, and seconds;
+- configurable iqama and Friday-prayer times;
+- fully localized interface in eight languages, including right-to-left Arabic;
 - persistent device settings and URL-based managed configuration;
 - cached prayer schedule when the network is temporarily unavailable;
 - installable Progressive Web App;
@@ -44,6 +46,7 @@ Configure a device without using its settings panel:
 ```text
 ?city=paris&lang=en&theme=emerald
 ?mosque=paris_grande-mosquee-de-paris&lang=fr&theme=midnight
+?mosque=paris_grande-mosquee-de-paris&lang=fr&iqama=fajr:05:30,dhuhr:14:15&jumuah=13:30,14:30
 ```
 
 Supported query parameters:
@@ -55,6 +58,8 @@ Supported query parameters:
 | `lang` | API language code |
 | `theme` | `emerald`, `midnight`, `sand`, or `auto` |
 | `name` | Optional custom display heading |
+| `iqama` | Comma-separated `prayer:HH:mm` values |
+| `jumuah` | Comma-separated Friday-prayer times |
 
 See [Kiosk setup](docs/KIOSK.md) for dedicated display instructions.
 

@@ -35,7 +35,7 @@
 
       <section class="hero" aria-labelledby="location-name">
         <div>
-          <p class="eyebrow" id="location-kind">Prayer times</p>
+          <p class="eyebrow" id="location-kind" data-i18n="prayerTimes">Prayer times</p>
           <h1 id="location-name">Loading…</h1>
           <p class="location-meta" id="location-meta"></p>
         </div>
@@ -47,13 +47,13 @@
 
       <section class="next-prayer" aria-labelledby="next-prayer-name">
         <div class="next-prayer-copy">
-          <p class="eyebrow">Next prayer</p>
+          <p class="eyebrow" data-i18n="nextPrayer">Next prayer</p>
           <h2 id="next-prayer-name">—</h2>
           <p id="next-prayer-time">—</p>
         </div>
         <div class="countdown" aria-live="polite">
           <span id="countdown-value">--:--:--</span>
-          <small>remaining</small>
+          <small data-i18n="remaining">remaining</small>
         </div>
         <div class="progress-track" aria-hidden="true">
           <span id="prayer-progress"></span>
@@ -62,10 +62,17 @@
 
       <section class="prayer-section" aria-labelledby="schedule-heading">
         <div class="section-heading">
-          <h2 id="schedule-heading">Today’s schedule</h2>
+          <h2 id="schedule-heading" data-i18n="todaysSchedule">Today’s schedule</h2>
           <p id="calculation-summary"></p>
         </div>
         <div class="prayer-grid" id="prayer-grid"></div>
+        <div class="jumuah-card" id="jumuah-card" hidden>
+          <div>
+            <p class="eyebrow" data-i18n="jumuah">Friday prayer</p>
+            <h3 id="jumuah-heading">Jumu’ah</h3>
+          </div>
+          <div class="jumuah-times" id="jumuah-times"></div>
+        </div>
       </section>
 
       <aside class="announcement" id="announcement" hidden>
@@ -74,33 +81,33 @@
       </aside>
 
       <footer>
-        <p>Prayer times powered by <a href="https://pray.zone/" target="_blank" rel="noopener">pray.zone</a></p>
+        <p><span data-i18n="poweredBy">Prayer times powered by</span> <a href="https://pray.zone/" target="_blank" rel="noopener">pray.zone</a></p>
         <p id="last-updated"></p>
       </footer>
     </main>
 
     <div class="error-banner" id="error-banner" role="alert" hidden>
-      <strong>Unable to update prayer times.</strong>
+      <strong data-i18n="unableToUpdate">Unable to update prayer times.</strong>
       <span id="error-message"></span>
-      <button id="retry-button" type="button">Retry</button>
+      <button id="retry-button" type="button" data-i18n="retry">Retry</button>
     </div>
 
     <dialog id="settings-dialog">
       <form method="dialog" id="settings-form">
         <div class="dialog-heading">
           <div>
-            <p class="eyebrow">Display setup</p>
-            <h2>Settings</h2>
+            <p class="eyebrow" data-i18n="displaySetup">Display setup</p>
+            <h2 data-i18n="settings">Settings</h2>
           </div>
           <button class="icon-button close-button" value="cancel" aria-label="Close settings">×</button>
         </div>
 
         <div class="form-grid">
           <label>
-            Schedule source
+            <span data-i18n="scheduleSource">Schedule source</span>
             <select name="sourceType" id="source-type">
-              <option value="city">City</option>
-              <option value="mosque">Mosque</option>
+              <option value="city" data-i18n="city">City</option>
+              <option value="mosque" data-i18n="mosque">Mosque</option>
             </select>
           </label>
           <label>
@@ -109,7 +116,7 @@
             <small id="source-help">Example: paris</small>
           </label>
           <label>
-            Language
+            <span data-i18n="language">Language</span>
             <select name="language">
               <option value="en">English</option>
               <option value="fr">Français</option>
@@ -122,7 +129,7 @@
             </select>
           </label>
           <label>
-            Theme
+            <span data-i18n="theme">Theme</span>
             <select name="theme">
               <option value="emerald">Emerald</option>
               <option value="midnight">Midnight</option>
@@ -131,15 +138,15 @@
             </select>
           </label>
           <label class="wide">
-            Mosque display name <span class="optional">(optional)</span>
+            <span><span data-i18n="displayName">Mosque display name</span> <span class="optional">(<span data-i18n="optional">optional</span>)</span></span>
             <input name="displayName" placeholder="Al Noor Community Mosque" maxlength="80">
           </label>
           <label class="wide">
-            Announcements <span class="optional">(one per line)</span>
+            <span><span data-i18n="announcements">Announcements</span> <span class="optional">(<span data-i18n="onePerLine">one per line</span>)</span></span>
             <textarea name="announcements" rows="4" placeholder="Friday prayer starts at 13:30&#10;Community dinner after Maghrib"></textarea>
           </label>
           <label>
-            Rotate announcements every
+            <span data-i18n="rotateEvery">Rotate announcements every</span>
             <select name="announcementInterval">
               <option value="10">10 seconds</option>
               <option value="20">20 seconds</option>
@@ -149,15 +156,30 @@
           </label>
           <label class="check-label">
             <input type="checkbox" name="showSeconds">
-            Show seconds
+            <span data-i18n="showSeconds">Show seconds</span>
+          </label>
+          <fieldset class="wide time-settings">
+            <legend data-i18n="iqamaTimes">Iqama times</legend>
+            <div class="time-input-grid">
+              <label>Fajr <input type="time" name="iqama-fajr"></label>
+              <label>Dhuhr <input type="time" name="iqama-dhuhr"></label>
+              <label>Asr <input type="time" name="iqama-asr"></label>
+              <label>Maghrib <input type="time" name="iqama-maghrib"></label>
+              <label>Isha <input type="time" name="iqama-isha"></label>
+            </div>
+          </fieldset>
+          <label class="wide">
+            <span data-i18n="jumuahTimes">Friday prayer times</span>
+            <input name="jumuahTimes" placeholder="13:30, 14:30" inputmode="numeric">
+            <small data-i18n="timeListHelp">Separate multiple times with commas</small>
           </label>
         </div>
 
         <div class="dialog-actions">
-          <button class="secondary-button" id="reset-button" type="button">Reset</button>
-          <button class="primary-button" value="save" type="submit">Save and refresh</button>
+          <button class="secondary-button" id="reset-button" type="button" data-i18n="reset">Reset</button>
+          <button class="primary-button" value="save" type="submit" data-i18n="saveRefresh">Save and refresh</button>
         </div>
-        <p class="settings-note">Settings stay on this device. Add <code>?city=paris&amp;lang=en</code> to the URL for managed displays.</p>
+        <p class="settings-note"><span data-i18n="settingsStay">Settings stay on this device.</span> Add <code>?city=paris&amp;lang=en</code> to the URL for managed displays.</p>
       </form>
     </dialog>
 

@@ -4,6 +4,8 @@ import {
   apiUrl,
   findNextPrayer,
   formatCountdown,
+  normalizeIqamaTimes,
+  normalizeJumuahTimes,
   normalizeSettings,
   parseTime,
   secondsUntilPrayer,
@@ -52,4 +54,23 @@ test("API URL uses the selected source", () => {
     apiUrl(settings).href,
     "https://pray.zone/api/public/cities/new-york/prayer-times?lang=en",
   );
+});
+
+test("iqama and Friday schedules are normalized", () => {
+  assert.deepEqual(
+    normalizeIqamaTimes("fajr:05:30;dhuhr:14:15;invalid:28:00"),
+    { fajr: "05:30", dhuhr: "14:15" },
+  );
+  assert.deepEqual(
+    normalizeJumuahTimes("14:30, 13:30, 13:30"),
+    ["13:30", "14:30"],
+  );
+});
+
+test("managed URL accepts mosque operational times", () => {
+  const settings = settingsFromSearch(
+    "?mosque=central&iqama=fajr:05:30,dhuhr:14:15&jumuah=13:30,14:30",
+  );
+  assert.deepEqual(settings.iqamaTimes, { fajr: "05:30", dhuhr: "14:15" });
+  assert.equal(settings.jumuahTimes, "13:30, 14:30");
 });

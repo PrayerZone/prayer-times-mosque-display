@@ -1,12 +1,12 @@
 {
   "name": "@prayerzone/mosque-display",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "A modern, installable mosque prayer-times display powered by pray.zone.",
   "type": "module",
   "scripts": {
     "dev": "npx --yes serve .",
-    "check": "node --check src/app.js && node --check src/core.js && node --check sw.js",
+    "check": "node --check src/app.js && node --check src/core.js && node --check src/i18n.js && node --check sw.js",
     "test": "node --test",
     "validate": "npm run check && npm test"
   },

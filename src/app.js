@@ -4,10 +4,12 @@ import {
   findNextPrayer,
   formatCountdown,
   getZonedParts,
+  normalizeJumuahTimes,
   normalizeSettings,
   secondsUntilPrayer,
   settingsFromSearch,
 } from "./core.js";
+import { prayerName, translator } from "./i18n.js";
 
 const STORAGE_KEY = "prayerzone-mosque-display-settings-v1";
 const CACHE_KEY = "prayerzone-mosque-display-data-v1";
@@ -18,7 +20,7 @@ const elements = Object.fromEntries(
     "app", "connection-status", "connection-label", "fullscreen-button",
     "settings-button", "location-kind", "location-name", "location-meta",
     "clock", "date", "next-prayer-name", "next-prayer-time",
-    "countdown-value", "prayer-progress", "prayer-grid",
+    "countdown-value", "prayer-progress", "prayer-grid", "jumuah-card", "jumuah-heading", "jumuah-times",
     "calculation-summary", "announcement", "announcement-text",
     "last-updated", "error-banner", "error-message", "retry-button",
     "settings-dialog", "settings-form", "source-type", "source-id",
@@ -27,6 +29,7 @@ const elements = Object.fromEntries(
 );
 
 let settings = loadSettings();
+let translate = translator(settings.language);
 let payload = null;
 let lastUpdated = null;
 let announcementTimer = null;
@@ -44,29 +47,30 @@ function loadSettings() {
 
 function saveSettings(value) {
   settings = normalizeSettings(value);
+  translate = translator(settings.language);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
 }
 
 function setConnection(state, label) {
   elements["connection-status"].dataset.state = state;
-  elements["connection-label"].textContent = label;
+  elements["connection-label"].textContent = translate(label);
 }
 
 function setError(error, cached = false) {
   elements["error-message"].textContent = cached
-    ? " Showing the latest saved schedule."
-    : ` ${error instanceof Error ? error.message : "Please try again."}`;
+    ? ` ${translate("showingSaved")}`
+    : ` ${error instanceof Error ? error.message : translate("tryAgain")}`;
   elements["error-banner"].hidden = false;
-  setConnection(cached ? "cached" : "offline", cached ? "Cached" : "Offline");
+  setConnection(cached ? "cached" : "offline", cached ? "cached" : "offline");
 }
 
 function clearError() {
   elements["error-banner"].hidden = true;
-  setConnection("online", "Live");
+  setConnection("online", "live");
 }
 
 async function fetchSchedule() {
-  setConnection("loading", "Updating");
+  setConnection("loading", "updating");
   try {
     const demoMode = new URLSearchParams(location.search).get("demo") === "1";
     const response = await fetch(demoMode ? "./assets/sample-paris.json" : apiUrl(settings), {
@@ -118,11 +122,15 @@ function locationDetails() {
 
 function render() {
   if (!payload?.data) return;
+  translate = translator(settings.language);
   document.documentElement.dataset.theme = settings.theme;
   document.documentElement.lang = settings.language;
+  document.documentElement.dir = settings.language === "ar" ? "rtl" : "ltr";
+  applyTranslations();
 
   const details = locationDetails();
-  elements["location-kind"].textContent = details.kind;
+  elements["location-kind"].textContent =
+    payload?.type === "mosque" ? translate("mosquePrayerTimes") : translate("localPrayerTimes");
   elements["location-name"].textContent = details.title;
   elements["location-meta"].textContent = details.meta;
 
@@ -134,20 +142,30 @@ function render() {
       article.dataset.prayer = String(prayer.id ?? prayer.name ?? "").toLowerCase();
 
       const label = document.createElement("p");
-      label.textContent = prayer.name || prayer.id || "Prayer";
+      label.textContent = prayerName(settings.language, prayer.id, prayer.name);
       const time = document.createElement("time");
       time.textContent = prayer.time;
       article.append(label, time);
+
+      const iqama = settings.iqamaTimes[String(prayer.id ?? "").toLowerCase()];
+      if (iqama) {
+        const iqamaTime = document.createElement("small");
+        iqamaTime.className = "iqama-time";
+        iqamaTime.textContent = `${translate("iqama")} ${iqama}`;
+        article.append(iqamaTime);
+      }
       return article;
     }),
   );
+  renderJumuahTimes();
 
   const calculation = payload.data.calculation;
   elements["calculation-summary"].textContent = calculation?.method
     ? `${calculation.method} · ${payload.data.timezone}`
     : payload.data.timezone;
   elements["last-updated"].textContent = lastUpdated
-    ? `Updated ${new Intl.DateTimeFormat(settings.language, {
+    ? `${translate("updated")} ${new Intl.DateTimeFormat(settings.language, {
+        timeZone: payload.data.timezone,
         hour: "2-digit",
         minute: "2-digit",
       }).format(lastUpdated)}`
@@ -155,6 +173,26 @@ function render() {
 
   startAnnouncements();
   updateClock();
+}
+
+function applyTranslations() {
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = translate(element.dataset.i18n);
+  });
+}
+
+function renderJumuahTimes() {
+  const times = normalizeJumuahTimes(settings.jumuahTimes);
+  elements["jumuah-heading"].textContent = translate("jumuah");
+  elements["jumuah-card"].hidden = times.length === 0;
+  elements["jumuah-times"].replaceChildren(
+    ...times.map((value, index) => {
+      const time = document.createElement("time");
+      time.textContent = value;
+      time.setAttribute("aria-label", `${translate("jumuah")} ${index + 1}: ${value}`);
+      return time;
+    }),
+  );
 }
 
 function updateClock() {
@@ -188,7 +226,11 @@ function updateClock() {
 
   if (!next) return;
   const remaining = secondsUntilPrayer(parts, next.time);
-  elements["next-prayer-name"].textContent = next.name || next.id || "Prayer";
+  elements["next-prayer-name"].textContent = prayerName(
+    settings.language,
+    next.id,
+    next.name,
+  );
   elements["next-prayer-time"].textContent = next.time;
   elements["countdown-value"].textContent = formatCountdown(remaining);
   const dayProgress = 1 - Math.min(remaining ?? 86400, 86400) / 86400;
@@ -224,12 +266,16 @@ function populateSettings() {
     if (field.type === "checkbox") field.checked = Boolean(value);
     else field.value = String(value);
   }
+  for (const id of ["fajr", "dhuhr", "asr", "maghrib", "isha"]) {
+    elements["settings-form"].elements.namedItem(`iqama-${id}`).value =
+      settings.iqamaTimes[id] ?? "";
+  }
   updateSourceHelp();
 }
 
 function updateSourceHelp() {
   const isMosque = elements["source-type"].value === "mosque";
-  elements["source-label"].textContent = isMosque ? "Mosque ID" : "City slug";
+  elements["source-label"].textContent = isMosque ? translate("mosqueId") : translate("citySlug");
   elements["source-help"].textContent = isMosque
     ? "Example: paris_grande-mosquee-de-paris"
     : "Example: paris";
@@ -240,6 +286,14 @@ elements["settings-form"].addEventListener("submit", (event) => {
   event.preventDefault();
   const data = Object.fromEntries(new FormData(elements["settings-form"]));
   data.showSeconds = elements["settings-form"].elements.showSeconds.checked;
+  data.iqamaTimes = Object.fromEntries(
+    ["fajr", "dhuhr", "asr", "maghrib", "isha"]
+      .map((id) => [id, data[`iqama-${id}`]])
+      .filter(([, value]) => value),
+  );
+  for (const id of ["fajr", "dhuhr", "asr", "maghrib", "isha"]) {
+    delete data[`iqama-${id}`];
+  }
   saveSettings(data);
   elements["settings-dialog"].close();
   void fetchSchedule();
@@ -273,10 +327,11 @@ document.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("online", fetchSchedule);
-window.addEventListener("offline", () => setConnection("offline", "Offline"));
+window.addEventListener("offline", () => setConnection("offline", "offline"));
 
 setInterval(updateClock, 1000);
 setInterval(fetchSchedule, REFRESH_INTERVAL);
+applyTranslations();
 void fetchSchedule();
 
 if ("serviceWorker" in navigator) {

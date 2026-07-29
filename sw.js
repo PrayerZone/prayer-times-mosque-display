@@ -1,10 +1,11 @@
-const CACHE_NAME = "prayerzone-mosque-display-v1";
+const CACHE_NAME = "prayerzone-mosque-display-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./src/app.js",
   "./src/core.js",
+  "./src/i18n.js",
   "./manifest.webmanifest",
   "./assets/icon.svg",
   "./assets/sample-paris.json",

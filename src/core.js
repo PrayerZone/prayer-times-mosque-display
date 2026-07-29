@@ -16,6 +16,8 @@ export const DEFAULT_SETTINGS = Object.freeze({
   announcements: "",
   announcementInterval: 20,
   showSeconds: false,
+  iqamaTimes: {},
+  jumuahTimes: "",
 });
 
 export function parseTime(value) {
@@ -89,7 +91,34 @@ export function normalizeSettings(value = {}) {
     sourceId: sourceId || DEFAULT_SETTINGS.sourceId,
     announcementInterval: [10, 20, 30, 60].includes(interval) ? interval : 20,
     showSeconds: Boolean(value.showSeconds),
+    iqamaTimes: normalizeIqamaTimes(value.iqamaTimes),
+    jumuahTimes: normalizeJumuahTimes(value.jumuahTimes).join(", "),
   };
+}
+
+export function normalizeIqamaTimes(value = {}) {
+  const source = typeof value === "string" ? parseIqamaParameter(value) : value;
+  return Object.fromEntries(
+    ["fajr", "dhuhr", "asr", "maghrib", "isha"]
+      .map((id) => [id, String(source?.[id] ?? "").trim()])
+      .filter(([, time]) => parseTime(time) !== null),
+  );
+}
+
+export function normalizeJumuahTimes(value = "") {
+  const values = Array.isArray(value) ? value : String(value).split(/[\n,;]+/);
+  return [...new Set(values.map((item) => item.trim()).filter((item) => parseTime(item) !== null))]
+    .sort((left, right) => parseTime(left) - parseTime(right));
+}
+
+export function parseIqamaParameter(value = "") {
+  return Object.fromEntries(
+    String(value)
+      .split(/[;,]+/)
+      .map((part) => part.split(":"))
+      .filter((parts) => parts.length === 3)
+      .map(([id, hour, minute]) => [id.trim().toLowerCase(), `${hour}:${minute}`]),
+  );
 }
 
 export function settingsFromSearch(search, fallback = DEFAULT_SETTINGS) {
@@ -107,6 +136,8 @@ export function settingsFromSearch(search, fallback = DEFAULT_SETTINGS) {
   if (params.has("lang")) value.language = params.get("lang");
   if (params.has("theme")) value.theme = params.get("theme");
   if (params.has("name")) value.displayName = params.get("name");
+  if (params.has("iqama")) value.iqamaTimes = params.get("iqama");
+  if (params.has("jumuah")) value.jumuahTimes = params.get("jumuah");
 
   return normalizeSettings(value);
 }
